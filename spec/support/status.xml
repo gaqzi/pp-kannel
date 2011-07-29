@@ -1,0 +1,72 @@
+<?xml version="1.0"?>
+<gateway>
+<version>Kannel bearerbox version `1.4.3'.
+Build `Apr  6 2010 13:16:08', compiler `4.4.3'.
+System Linux, release 2.6.32-21-generic-pae, version #32-Ubuntu SMP Fri Apr 16 09:39:35 UTC 2010, machine i686.
+Hostname nurse.lan.sanitarium.se, IP 127.0.1.1.
+Libxml version 2.7.6.
+Using OpenSSL 0.9.8k 25 Mar 2009.
+Compiled with MySQL 5.1.41, using MySQL 5.1.41.
+Using native malloc.
+</version>
+<status>running, uptime 0d 8h 12m 5s</status>
+<wdp>
+  <received><total>0</total><queued>0</queued></received>
+  <sent><total>0</total><queued>0</queued></sent>
+  </wdp>
+
+<sms>
+  <received><total>8</total><queued>0</queued></received>
+  <sent><total>416</total><queued>0</queued></sent>
+  <storesize>0</storesize>
+  <inbound>0.00,0.00,0.00</inbound>
+  <outbound>0.21,0.90,0.01</outbound>
+
+  </sms>
+<dlr>
+  <queued>0</queued>
+  <storage>internal</storage>
+  </dlr>
+<boxes>
+  <box>
+    <type>smsbox</type>
+
+    <id></id>
+    <IP>127.0.0.1</IP>
+    <queue>0</queue>
+    <status>on-line 0d 8h 12m 4s</status>
+    <ssl>no</ssl>
+    </box></boxes>
+<smscs><count>42</count>
+
+  <smsc>
+    <name>AT2[modem0]</name>
+    <id>modem0</id>
+    <status>online 29520s</status>
+    <received>0</received>
+    <sent>38</sent>
+
+    <failed>0</failed>
+    <queued>0</queued>
+    </smsc>
+<smsc>
+  <name>AT2[modem1]</name>
+  <id>modem1</id>
+  <status>dead</status>
+
+  <received>1</received>
+  <sent>35</sent>
+  <failed>0</failed>
+  <queued>0</queued>
+  </smsc>
+<smsc>
+  <name>AT2[modem2]</name>
+  <id>modem2</id>
+  <status>dead</status>
+
+  <received>0</received>
+  <sent>0</sent>
+  <failed>0</failed>
+  <queued>0</queued>
+  </smsc>
+</gateway>

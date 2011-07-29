@@ -1,0 +1,15 @@
+# If the log is non-empty (size > 0b) parse it for any events and react
+/var/log/kannel/bearerbox.log.current {
+	size 1
+	missingok
+	rotate 1
+	nocompress
+	notifempty
+	create 640 kannel adm
+	sharedscripts
+	postrotate
+		killall -HUP bearerbox smsbox wapbox > /dev/null 2> /dev/null || true
+		# Append the last 5 minutes worth of log to the big daily log
+		cat /var/log/kannel/bearerbox.log.current.1 >> /var/log/kannel/bearerbox.log
+	endscript
+}

@@ -1,0 +1,1 @@
+ACTION=="remove", KERNEL=="ttyUSB*", RUN+="/usr/local/bin/modem-symlink-remove.sh %k"

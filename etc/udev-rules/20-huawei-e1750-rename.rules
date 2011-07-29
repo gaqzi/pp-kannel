@@ -1,0 +1,1 @@
+ACTION=="add", KERNEL=="ttyUSB*", RUN+="/usr/local/bin/modem-symlink-add.rb %k"

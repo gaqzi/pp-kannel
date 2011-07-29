@@ -1,0 +1,5 @@
+---
+:config: /etc/kannel/sms-centers.conf
+:admin_password: bar
+:admin_url: http://127.0.0.1:13000/
+:cache: /etc/kannel/cache.yml

@@ -1,0 +1,16 @@
+2010-09-17 23:12:56 [21180] [7] ERROR: AT2[modem1]: CMS ERROR: +CMS ERROR: 500
+2010-09-17 23:12:56 [21180] [7] ERROR: AT2[modem1]: CMS ERROR: Unknown error. -> maybe Sim storage is full? I'll have a look at it. (500)
+2010-09-17 23:35:57 [21180] [3] INFO: HTTP: Shutting down smsc-id `modem11'
+2010-09-17 23:35:58 [21180] [60] INFO: AT2[modem11]: Closing device
+2010-09-17 23:36:14 [21180] [3] INFO: HTTP: Re-starting smsc-id `modem11'
+2010-09-17 23:36:14 [21180] [3] INFO: DLR rerouting for smsc id <modem11> disabled.
+2010-09-17 23:36:14 [21180] [3] INFO: AT2[modem11]: configuration doesn't show modemtype. will autodetect
+2010-09-17 23:36:14 [21180] [68] INFO: AT2[modem11]: opening device
+2010-09-17 23:36:15 [21180] [68] INFO: AT2[modem11]: speed set to 460800
+2010-09-17 23:36:17 [21180] [68] INFO: AT2[modem11]: Closing device
+2010-09-17 23:36:17 [21180] [68] INFO: AT2[modem11]: opening device
+2010-09-17 23:36:17 [21180] [68] INFO: AT2[modem11]: Logging in
+2010-09-17 23:36:18 [21180] [68] INFO: AT2[modem11]: init device
+2010-09-17 23:36:18 [21180] [68] INFO: AT2[modem11]: speed set to 460800
+2010-09-17 23:36:19 [21180] [68] INFO: AT2[modem11]: AT SMSC successfully opened.
+2010-09-17 23:45:01 [21180] [0] WARNING: SIGHUP received, catching and re-opening logs

@@ -1,0 +1,2 @@
+# Run every five minute and parse the log file
+*/5	*	*	*	*	root    /usr/local/bin/logrotate-kannel

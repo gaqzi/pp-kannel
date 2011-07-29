@@ -1,0 +1,68 @@
+# Sample configuration file for Kannel bearerbox on Debian.
+# See the documentation for explanations of fields.
+#
+
+# HTTP administration is disabled by default. Make sure you set the
+# password if you enable it.
+
+group = core
+admin-port = 13000
+admin-password = bar
+#admin-deny-ip = "*.*.*.*"
+#admin-allow-ip = "192.168.7.2"
+admin-allow-ip = "127.0.0.1"
+smsbox-port = 13001
+wdp-interface-name = "*"
+# 0 => debug
+# 1 => info
+# 2 => warning
+# 3 => error
+# 4 => panic
+log-level = 0
+log-file = "/var/log/kannel/bearerbox.log.current"
+box-deny-ip = "*.*.*.*"
+box-allow-ip = "127.0.0.1"
+sms-resend-retry = 5
+sms-resend-freq = 60
+# Dump all unsent messages to disk every 10 seconds,
+# in case something nasty happens
+store-type = spool
+store-location = /var/spool/kannel
+store-dump-freq = 10
+
+group = smsbox
+bearerbox-host = localhost
+sendsms-port = 13013
+log-file = "/var/log/kannel/smsbox.log"
+global-sender = "Piratpartiet"
+
+group = sendsms-user
+username = sms-user
+password = sms-pass
+white-list-regex = ^(((00|\+)46)|0)7[0236][0-9]{7}$
+dlr-url = "http://localhost/dlr.html?msg=%a&to=%Q&dlr=%D;;%A"
+max-messages = 3
+concatenation = true
+
+group = sms-service
+keyword = lulz
+get-url = "http://receiver.domain.tld/kannel.php?sender=%q&receiver=%Q&message=%r&timestamp=%T&smsc=%i&type=adbot"
+
+# If a SMS is received that doesn't contain a keyword pass it on to PirateWeb
+#   sender, receiver and time received.
+group = sms-service
+keyword = default
+catch-all = true
+omit-empty = true
+get-url = "https://pirateweb.net/sms.ashx?phoneNumber=%q&receivedAt=%T&message=%b&modem=%i"
+
+group = modems
+id = huawei_e1750_00
+name = "Huawei E1750"
+detect-string = "huawei"
+init-string = "AT+CNMI=2,1,2,2,0"
+message-storage = "SM"
+speed = 460800
+
+include = "/etc/kannel/sms-centers.conf"
+#include = "/etc/kannel/dlr-mysql.conf"

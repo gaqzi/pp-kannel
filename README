@@ -1,0 +1,123 @@
+* Kannel configuration and why it is setup the way it is
+** How SMS Centers and modems are mapped
+* Known problems
+* Installation and setup
+
+= Kannel configuration and why it is setup the way it is =
+
+Kannel is setup in a very simple configuration because I'm assuming only
+authorized IP:s will be able to access Kannel and the communication will be
+encrypted.
+
+The Kannel administration interface is accessible at http://localhost:13000/.
+If you tuck status at the end you'll see how Kannel is doing at the moment.
+You can also start and stop SMS Centers with the URL:
+  /<start|stop>-smsc?password=<admin_password>&smsc=<smsc id>
+  (This is automatically done when a modem is connected/disconnected from the
+   system by kannel-manage-smsc.rb through udev)
+
+All queued SMS messages will be dumped to disk every 10 seconds in the
+directory /var/spool/kannel. So if there's a sudden outage we will not
+loose all messages, but some will get duplicate messages.
+
+If a SMS is sent to any connected number and there is no configured
+handler, which there are none at the moment, it will send a GET to:
+  http://127.0.0.1/log.html?sender?&receiver=&message&sent=unix_timestamp
+So check the web servers access log for any incoming messages.
+You can see how many messages has been received since the last time Kannel
+was started at the status page.
+
+I've pre-configured 42 SMS Centers, 0-41, which can be started if that many
+modems would happen to get connected at the same time.
+
+The modem0 SMS Center will not load balance to other SMS Centers, that is
+because we want to be sure that number is static for replies from members.
+  (Assuming we don't get banned from Telias network)
+
+All other SMS Centers will prefer to send through itself but will load balance
+as necessary.
+
+How Kannels routing works:
+  http://old.nabble.com/Routing-of-outgoing-sms-td19723248.html
+
+The sample configuration file got a configuration ready for using MySQL for
+delivery notification storage. Just uncomment the include line and make sure
+you've configured MySQL according to the configuration file.
+
+== How SMS Centers and modems are mapped ==
+
+Sadly there is no way to say that a specific modem is modem3 at all times.
+There is no unique information passed from the modem to udev, IMEI/SN, so it
+all depends on the sequence the modems are connected to the system.
+And since each modem creates three TTY-devices it is hell to manage.
+
+To alleviate this to a degree I've setup an udev-rule to create a symlink for
+the TTY-device that is labeled as interface 02 to /dev/modems/modem<num>.
+
+The <num> is the highest number modem<num>-device in the directory +1. If
+there are no devices in the directory modem0 will be created. But this also
+means that if you have three modems connected (modem0->2) and you
+disconnect modem1 and connect it again, it will show up as modem3 since
+modem2 is the highest number available.
+(And because of the remove udev-rule SMS Center modem1 will be stopped and
+ modem3 will be started.)
+
+The udev rule will not fill in gaps.
+
+== Sending SMS messages ==
+
+http://localhost:13013/cgi-bin/sendsms?to=number&text=message&username=<>&password=<>
+
+Look in the Kannel manual for more information:
+  http://www.kannel.org/download/1.4.3/userguide-1.4.3/userguide.html#AEN4322
+
+= Known problems =
+
+At the event of a modem running out of cash or free SMS:es Kannel will try to
+re-send forever. So you'll have to look at the bearerbox log
+(/var/log/kannel/bearerbox.log) for any problems sending messages.
+
+If the message hasn't been sent in a long time just stop that SMS Center and
+the message will be re-queued at another center, unless it is the modem0 center.
+In that case the best path of action is to rename the modem symlinks and
+start/stop the SMS Centers involved.
+
+= Installation and setup =
+
+just running setup.sh on an Ubuntu/Debian system should set Kannel up to be
+ready to start sending SMS.
+
+The setup will:
+
+* Install these packages
+** usb-modeswitch, which is used to make the Huawei E1750 modem accessible
+** libusb-dev, goes with usb-modeswitch
+** ruby and a lot of helper libraries for nokogiri, used for some extra management scripts
+** kannel, the SMS gateway itself
+** nokogiri, a ruby gem used for XML parsing
+* Copy over some configuration files:
+** etc/usb_modeswitch.conf -> /etc/
+** etc/udev-rules/* -> /etc/udev/rules.d/
+*** 15-huawei-e1750.rules, this rule uses usb-modeswitch to active the modem
+*** 20-huawei-e1750-rename.rules, this rule creates a /dev/modems/modem<num>
+    symlink for the modem and starts the corresponding SMS Center in Kannel
+*** 20-huawei-e1750-remove.rules, removes the /dev/modems/modem<num> symlink
+    and stops the corresponding SMS Center in Kannel
+* Copies over the kannel configuration files to /etc/kannel
+* Install helpers scripts for the 20-* udev rules into /usr/local/bin
+** kannel-manage-smsc.rb can be used to start/stop SMS centers from the CLI
+   start without any arguments to get usage.
+   This script has a configuration file that is automatically copied to:
+     /etc/kanel-manage-smsc.rb
+  As long as no parameters in changed in the Kannel configuration file it will
+  be OK.
+* Adds kannel to the dialout group so it can access the modems
+* Creates /var/spool/kannel and chowns it to Kannel. SMS that hasn't been sent
+  yet will be cached here. Dumped to disk every 10 seconds.
+* An updated init.d script is installed. This script turns of all SMS Centers
+  that don't have access to their modems. Will avoid problems with routing and
+  remove a lot of CPU usage.
+
+Now you just need to copy the sample configuration into kannel.conf and edit
+those parts that needs editing. Then restart kannel by doing:
+# /etc/init.d/kannel restart

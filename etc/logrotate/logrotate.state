@@ -1,0 +1,2 @@
+logrotate state -- version 2
+"/var/log/kannel/bearerbox.log.current" 2011-4-2

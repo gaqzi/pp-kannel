@@ -1,0 +1,10 @@
+---
+:smsc:
+  modem0: 2
+  modem1: 1
+:messages_sent: 416
+:last_updated: 2010-09-18 20:31:30
+:stored_messages: 0
+:current_month: 9
+:stored_same_count: 0
+:uptime: 29525

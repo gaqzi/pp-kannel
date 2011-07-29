@@ -1,0 +1,5 @@
+#!/bin/sh
+PATH=/usr/sbin:$PATH
+KANNEL_PATH=/etc/kannel/logrotate
+
+logrotate -s $KANNEL_PATH/logrotate.state $KANNEL_PATH/kannel-current
