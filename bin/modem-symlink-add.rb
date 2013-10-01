@@ -9,7 +9,7 @@ def dev_num(dev, regex = 'modem(\d+)')
   dev.match(regex)[1].to_i
 end
 
-if ENV['ID_IFACE'] == '02'
+if ENV['ID_USB_INTERFACE_NUM'] == '02'
   next_num = if File.exists? '/dev/modems/'
                devices = Dir.glob('/dev/modems/modem*')
                if devices.size > 0
